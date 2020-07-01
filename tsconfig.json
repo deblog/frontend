@@ -28,5 +28,5 @@
         }
       }
     },
-    "files": ["environment.d.ts"]
+    // "files": ["environment.d.ts"]
   }
