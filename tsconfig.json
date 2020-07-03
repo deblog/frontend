@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "lib": ["es6", "es7", "dom"],
+    "moduleResolution": "node",
+    "removeComments": true,
+    "target": "es5",
+    "declaration": false,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["build", "node_modules"]
+}
+
+// {
+//   "compilerOptions": {
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true,
+//     "jsx": "react-native",
+//     "lib": ["es2017", "es2018"],
+//     "module": "es2015",
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "noEmit": true,
+//     "noImplicitAny": false,
+//     "skipLibCheck": true,
+//     "sourceMap": true,
+//     "strict": true,
+//     "target": "es2017",
+//     "baseUrl": "src"
+//   },
+//   "include": ["src/**/*.ts", "src/**/*.tsx"],
+//   "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
+//   "types": ["typePatches"],
+//   "jest": {
+//     "globals": {
+//       "ts-jest": {
+//         "skipBabel": true
+//         // "tsConfigFile": "my-tsconfig.json"
+//       }
+//     }
+//   },
+//   // "files": ["environment.d.ts"]
+// }
