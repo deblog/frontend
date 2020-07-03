@@ -1,3 +1,10 @@
-import { getUsers } from '~/operations/users-operations';
+export { api } from '~/lib/api';
+export { getUsers } from '~/operations/user-operations';
+export { getPosts, getPost } from '~/operations/post-operations';
 
-export const indexUsers = getUsers;
+export const router = {
+  address: {
+    index: '/',
+    users: '/users',
+  },
+};

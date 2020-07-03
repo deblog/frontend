@@ -1,13 +1,18 @@
 import express from 'express';
-import { indexUsers } from '~/lib/utils';
+import { getUsers, getPost, getPosts, api } from '~/lib/utils';
 const router = express.Router();
 
-router.get('/', function (req, res, next) {
+router.get(api.index.get, (req, res, next) => {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/users', function (req, res, next) {
-  const data = indexUsers();
-  res.json({ data: data });
+router.get(api.user.get, (req, res, next) => {
+  const data = getUsers();
+  res.json({ users: data });
+});
+
+router.get(api.post.get, (req, res, next) => {
+  const data = getPosts(15);
+  res.json({ posts: data });
 });
 module.exports = router;
