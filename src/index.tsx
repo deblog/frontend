@@ -5,10 +5,10 @@ import App from '~/components/App';
 import _ from 'lodash';
 // import { img_apple } from '~/components/base/images';
 
-const abc = [1, 2, 3];
+// const abc = [1, 2, 3];
 
-const aaa = _.map(abc, i => i + 5);
-console.log(aaa, 'aaa');
+// const aaa = _.map(abc, i => i + 5);
+
 export interface HelloProps {
   compiler: string;
   framework: string;

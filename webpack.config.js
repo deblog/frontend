@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+var isProduction = process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production';
 
 const config = {
   entry: ['react-hot-loader/patch', './src/index.tsx'],
@@ -79,7 +80,7 @@ const config = {
     },
   },
   devServer: {
-    port: 9995,
+    // port: 9995,
     contentBase: './dist',
   },
   optimization: {
