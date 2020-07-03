@@ -4,10 +4,10 @@ import { PlainTemplate } from '~/components/base/template';
 import { PlainHeader } from '~/components/common/header';
 import { Page } from '~/pages';
 
-const Home = () => (
-  <Page title={mapper.pages.index.title}>
-    <PlainTemplate header={<PlainHeader />}>Home Page</PlainTemplate>
+const SignIn = () => (
+  <Page title={mapper.pages.signIn.title}>
+    <PlainTemplate header={<PlainHeader />}>Login Page</PlainTemplate>
   </Page>
 );
 
-export default Home;
+export default SignIn;
