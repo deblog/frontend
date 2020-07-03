@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-var isProduction = process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production';
+const isProduction = process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production';
 
 const config = {
   entry: ['react-hot-loader/patch', './src/index.tsx'],
@@ -76,7 +76,7 @@ const config = {
     alias: {
       'react-dom': '@hot-loader/react-dom',
       '~': path.resolve(__dirname, 'src/'),
-      '@': path.resolve(__dirname, 'src/'),
+      '@': path.resolve(__dirname, '/'),
     },
   },
   devServer: {

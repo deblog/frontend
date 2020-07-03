@@ -1,20 +1,27 @@
-import React from 'react';
+import { ReactChildren } from '@/types/global.d';
 
-export namespace CommonProps {
-  export type Children = React.ReactNode[] | React.ReactNode;
-  export interface ReactNode {
-    children?: React.ReactNode[] | React.ReactNode;
+// onSave: (text: string) => void; 이런건 뭐지? 반환값 없을때
+export type ReactChildrenString = ReactChildren | String;
+export interface Template {
+  header?: ReactChildrenString;
+  nav?: ReactChildrenString;
+  main?: ReactChildrenString;
+  children?: ReactChildrenString;
+}
+
+export namespace TypePlainTemplate {
+  export interface Props extends Template {
+    sidebar?: ReactChildrenString;
+  }
+  export interface State {
+    readonly header?: object;
+    readonly nav?: object;
+    readonly children?: object;
   }
 }
-// onSave: (text: string) => void; 이런건 뭐지?
-export namespace TemplateProps {
-  export interface Template {
-    header?: CommonProps.Children | String;
-    main?: CommonProps.Children | String;
-    children?: CommonProps.Children | String;
-  }
 
-  export interface PlainTemplate extends Template {
-    sidebar?: CommonProps.Children;
+export namespace TypeNavTemplate {
+  export interface Props extends Template {
+    navigation?: ReactChildrenString;
   }
 }
