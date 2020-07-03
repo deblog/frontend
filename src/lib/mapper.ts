@@ -14,6 +14,12 @@ export const mapper = {
       title: 'Login',
       index: 'signin',
     },
+    signUp: {
+      url: '/signup',
+      title: 'Sign Up',
+      index: 'signUp',
+    },
+
     about: {
       url: '/about',
       title: 'About',

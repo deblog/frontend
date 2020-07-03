@@ -22,6 +22,11 @@ function PlainHeader() {
           Login
         </Link>
       </div>
+      <div className="header__rows">
+        <Link to={mapper.pages.signUp.url} className="header__link">
+          Sign Up
+        </Link>
+      </div>
     </Styled.PlainHeader>
   );
 }
@@ -31,6 +36,7 @@ const Styled = {
   PlainHeader: styled.header`
     & {
       ${floatClear};
+      border-bottom: 1px solid ${color.gray_border};
       .header__rows {
         float: left;
       }
