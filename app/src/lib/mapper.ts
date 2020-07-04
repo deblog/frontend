@@ -9,6 +9,21 @@ export const mapper = {
       title: 'Home',
       index: 'home',
     },
+    user: {
+      url: '/user',
+      title: 'user',
+      index: 'user',
+    },
+    mypage: {
+      url: '/mypage',
+      title: 'Mypage',
+      index: 'mypage',
+    },
+    auth: {
+      url: '/auth',
+      title: 'Auth',
+      index: 'auth',
+    },
     signIn: {
       url: '/signin',
       title: 'Login',

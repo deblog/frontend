@@ -4,3 +4,6 @@ export { default as Page } from './Page';
 export { default as About } from './About';
 export { default as SignIn } from './SignIn';
 export { default as SignUp } from './SignUp';
+export { default as Auth } from './Auth';
+export { default as Mypage } from './Mypage';
+export { default as User } from './User';

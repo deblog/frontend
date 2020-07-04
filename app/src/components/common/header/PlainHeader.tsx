@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { mapper } from '~/lib/mapper';
 import { color, floatClear, resetLink, textUnderline } from '~/styles/_utils';
 
@@ -8,24 +8,41 @@ function PlainHeader() {
   return (
     <Styled.PlainHeader>
       <div className="header__rows">
-        <Link to={mapper.pages.index.url} className="header__link">
+        <NavLink to={mapper.pages.index.url} className="header__link" exact>
           Home
-        </Link>
+        </NavLink>
       </div>
       <div className="header__rows">
-        <Link to={mapper.pages.about.url} className="header__link">
+        <NavLink to={mapper.pages.about.url} className="header__link" exact>
           About
-        </Link>
+        </NavLink>
       </div>
       <div className="header__rows">
-        <Link to={mapper.pages.signIn.url} className="header__link">
+        <NavLink
+          to={`${mapper.pages.auth.url}${mapper.pages.signIn.url}`}
+          className="header__link"
+          exact
+        >
           Login
-        </Link>
+        </NavLink>
       </div>
       <div className="header__rows">
-        <Link to={mapper.pages.signUp.url} className="header__link">
+        <NavLink
+          to={`${mapper.pages.auth.url}${mapper.pages.signUp.url}`}
+          className="header__link"
+          exact
+        >
           Sign Up
-        </Link>
+        </NavLink>
+      </div>
+      <div className="header__rows">
+        <NavLink
+          to={`${mapper.pages.user.url}${mapper.pages.mypage.url}`}
+          className="header__link"
+          exact
+        >
+          Mypage
+        </NavLink>
       </div>
     </Styled.PlainHeader>
   );
@@ -47,6 +64,9 @@ const Styled = {
         ${resetLink};
         ${textUnderline(color.black_font, 1, 0.25)};
         /* border: 1px solid gray; */
+        &.active {
+          font-weight: bold;
+        }
       }
     }
   `,
