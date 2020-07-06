@@ -31,10 +31,4 @@ class Database {
   }
 }
 
-console.log('오홍');
-
-var sql = fs.readFileSync('./database/exec.sql').toString();
 export const database = new Database(databaseConfig);
-
-const rows = database.query(sql);
-console.log(rows, '!!');

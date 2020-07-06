@@ -7,6 +7,7 @@ CREATE TABLE `languages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=136 ;
 
 -- Languages --
+
 INSERT INTO `languages` VALUES(1, 'English', 'en');
 INSERT INTO `languages` VALUES(2, 'Afar', 'aa');
 INSERT INTO `languages` VALUES(3, 'Abkhazian', 'ab');
