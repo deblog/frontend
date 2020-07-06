@@ -1,27 +1,50 @@
 import express from 'express';
-import { getUsers, getPost, getPosts, api } from '~/lib/utils';
+import _ from 'lodash';
 import { database } from '~/database/mysql';
+import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
+import { api, errorState, convertObjectToCommaString } from '~/lib/utils';
 const router = express.Router();
 
+// NOTE: main
 router.get(api.index.get, async (req, res, next) => {
-  const rows = await database.query(`SELECT * FROM deblog.users`);
-  console.log(rows, 'rows');
-  res.render('index', { title: 'Express' });
+  const body = {
+    result: 1,
+  };
+  res.json(body);
+});
+// NOTE: signup
+router.post(api.signup.post, async (req, res, next) => {
+  const userCode = uuidv4().replace(/\-/g, '');
+  const { email, password } = req.body;
+  const insertFormat = {
+    email,
+    password,
+    userCode,
+    createAt: moment().unix(),
+  };
+  const { keys, values } = convertObjectToCommaString(insertFormat);
+  const rows = await database.query(`INSERT INTO deblog.users (${keys}) values (${values})`);
+
+  if (rows.affectedRows && !rows.error) {
+    res.json({ result: 1 });
+  } else {
+    if (rows.error) res.json(errorState(rows));
+  }
 });
 
-router.get('/insert', async (req, res, next) => {
-  const rows = await database.query(`SELECT * FROM deblog.users`);
-  console.log(rows, 'rows');
-  res.render('index', { title: 'Express' });
+// NOTE: login
+router.post(api.login.post, async (req, res, next) => {
+  const { email, password } = req.body;
+  const rows = await database.query(
+    `SELECT * FROM deblog.users WHERE (email="${email}" ) AND (password="${password}") `,
+  );
+
+  if (rows.length === 1) {
+    res.json({ result: 1, ..._.omit(rows[0], ['id', 'password']) });
+  } else {
+    res.json({ result: 2 });
+  }
 });
 
-router.get(api.user.get, (req, res, next) => {
-  const data = getUsers();
-  res.json({ users: data });
-});
-
-router.get(api.post.get, (req, res, next) => {
-  const data = getPosts(15);
-  res.json({ posts: data });
-});
 module.exports = router;
