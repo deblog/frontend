@@ -1,8 +1,17 @@
 import express from 'express';
 import { getUsers, getPost, getPosts, api } from '~/lib/utils';
+import { database } from '~/database/mysql';
 const router = express.Router();
 
-router.get(api.index.get, (req, res, next) => {
+router.get(api.index.get, async (req, res, next) => {
+  const rows = await database.query(`SELECT * FROM deblog.users`);
+  console.log(rows, 'rows');
+  res.render('index', { title: 'Express' });
+});
+
+router.get('/insert', async (req, res, next) => {
+  const rows = await database.query(`SELECT * FROM deblog.users`);
+  console.log(rows, 'rows');
   res.render('index', { title: 'Express' });
 });
 
