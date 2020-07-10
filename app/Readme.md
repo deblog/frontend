@@ -1,6 +1,3 @@
 # Frontend
 
-!!!!!!!!
-
-
 ***checkout develop branch***
