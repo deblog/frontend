@@ -1,6 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, {
+  useRef,
+  // useEffect
+} from 'react';
 import styled from '@emotion/styled';
-import { storage, stringBoolean } from '~/lib/utils';
+import {
+  storage,
+  // stringBoolean
+} from '~/lib/utils';
 import { useImmer } from 'use-immer';
 import { color } from '~/styles/_utils';
 import { useQuery } from '@apollo/react-hooks';
@@ -41,13 +47,14 @@ const SignInContainerState = {
 function SignInContainer() {
   const [values, setValues] = useImmer(SignInContainerState);
   const [emailRef, passwordRef] = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
-  const getStRemember = storage.get('remember');
-  const convertGetStRemenber = stringBoolean(getStRemember);
+  // const getStRemember = storage.get('remember');
+  // const convertGetStRemenber = stringBoolean(getStRemember);
   const valuesRemenber = values.remember;
   const isLogged = true;
   const { loading, error, data } = useQuery<getUserData>(GET_USERS);
   console.log(loading, error, data);
-
+  // DEBUG: graphql이랑 useEffect 어떻게 쓰는지 알아보기
+  // DEBUG: graphql serve mysql 연결하기
   /**
    * NOTE: event click
    * @param config
@@ -82,11 +89,13 @@ function SignInContainer() {
   };
 
   // NOTE: init
-  useEffect(() => {
-    setValues(draft => {
-      draft.remember = convertGetStRemenber;
-    });
-  }, []);
+  // useEffect(() => {
+  //   setValues(draft => {
+  //     draft.remember = convertGetStRemenber;
+  //   });
+  // }, []);
+
+  if (loading) return <Loading value={loading} />;
 
   return (
     <div>
@@ -129,9 +138,22 @@ function SignInContainer() {
             Login
           </button>
         </div>
+
+        {data &&
+          data.users.map(item => {
+            return <div key={item.id}>{item.name}</div>;
+          })}
       </Stlyed.SignInContainer>
     </div>
   );
+}
+
+interface LoadingProp {
+  value?: boolean | undefined | null;
+}
+function Loading(props: LoadingProp): any {
+  const { value } = props;
+  return value ? 'Loading...' : '';
 }
 
 const Stlyed = {
