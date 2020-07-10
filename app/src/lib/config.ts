@@ -2,6 +2,10 @@ export const ENV_MODE = process.env.NODE_ENV;
 export const ENV_MODE_DEV = process.env.NODE_ENV === 'development';
 export const ENV_MODE_PROD = process.env.NODE_ENV === 'production';
 
+export const API_ADDRESS = ENV_MODE_DEV
+  ? `http://127.0.0.1:4000/graphql`
+  : `http://127.0.0.1:4000/graphql`;
+
 export const api_address = ENV_MODE_DEV ? `http://127.0.0.1:9999` : `http://127.0.0.1:9999`;
 export const lfw_address = ENV_MODE_DEV ? `http://localhost:13986` : `http://15.164.27.98:28180`;
 // NOTE: Electron Local Test

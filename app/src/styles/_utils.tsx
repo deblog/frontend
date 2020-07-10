@@ -82,7 +82,7 @@ export const positionWide = css`
   height: 100%;
 `;
 
-export const font = (size = 14, color = 'black') => {
+export const font = (size: number = 14, color: string | undefined = 'black') => {
   return css`
     color: ${color};
     font-size: ${size}px;

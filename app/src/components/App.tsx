@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, About, Error, Auth, User, SignIn } from '~/pages';
+import { Home, About, Error, Auth, User } from '~/pages';
 import { mapper } from '~/lib/mapper';
 import { PublicRoute, PrivateRoute } from '~/components/base/route';
 
