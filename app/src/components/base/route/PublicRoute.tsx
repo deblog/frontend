@@ -9,6 +9,7 @@ interface PublicRouteProps extends RouteProps {
 
 const PublicRoute = (props: PublicRouteProps) => {
   const { component: Component, restricted, redirect = '', ...rest } = props;
+  console.log('?');
   if (!Component) return null;
   return (
     <Route
@@ -17,7 +18,7 @@ const PublicRoute = (props: PublicRouteProps) => {
     />
   );
 };
-/*  */
+
 export default PublicRoute;
 // DEBUG: isLogin쪽 체크해보기
 // import {ReactChildren} from '@/types/global.d';

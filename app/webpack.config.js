@@ -5,17 +5,21 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const isProduction = process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production';
-
 const config = {
   entry: ['react-hot-loader/patch', './src/index.tsx'],
   output: {
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    // filename: 'bundle.js',
+    filename: '[name].[hash].js',
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
+      filename: 'index.html',
+      appMountId: 'root',
       append: {
         head: `<script src="//cdn.polyfill.io/v3/polyfill.min.js"></script>`,
       },
@@ -63,7 +67,7 @@ const config = {
         test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
-      { test: /\.html$/, use: 'html-loader' },
+      // { test: /\.html$/, use: 'html-loader' },
       {
         test: /\.(jpe?g|gif|bmp|mp3|mp4|ogg|wav|eot|ttf|woff|woff2)$/,
         use: 'file-loader',
@@ -81,6 +85,7 @@ const config = {
   },
   devServer: {
     // port: 9995,
+    historyApiFallback: true,
     contentBase: './dist',
   },
   optimization: {
@@ -101,6 +106,7 @@ module.exports = (env, argv) => {
   if (argv.hot) {
     // Cannot use 'contenthash' when hot reloading is enabled.
     config.output.filename = '[name].[hash].js';
+    // config.output.filename = 'bundle.js';
   }
 
   return config;
