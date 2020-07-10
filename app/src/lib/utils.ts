@@ -20,3 +20,57 @@ export function getElementSize(target: CurrentRef) {
   }
   return { x: null, y: null };
 }
+
+/**
+ * NOTE: 스토리지 맵핑 오브젝트
+ */
+export const storage = {
+  set(key: string, value: string) {
+    localStorage.setItem(key, JSON.stringify(value));
+    // st[key] = JSON.stringify(value);
+  },
+  get(key: string) {
+    if (!localStorage.getItem(key)) return null;
+    const value = localStorage.getItem(key);
+    try {
+      const parsed = JSON.parse(value || '');
+      return parsed;
+    } catch (e) {
+      return value;
+    }
+  },
+  remove(key: string) {
+    localStorage.removeItem(key);
+  },
+  clear() {
+    if (localStorage.clear) {
+      localStorage.clear();
+    }
+  },
+};
+
+/**
+ * NOTE: 스트링 "true"나 true 로 들어온 값을 불리언으로 변환해 비교해줍니다.
+ * @param {boolean, string} string
+ */
+export function stringBoolean(string: string) {
+  let value = null;
+  if (typeof string === 'string') {
+    value = string.toLowerCase().trim();
+  } else {
+    value = string;
+  }
+  switch (value) {
+    case 'true':
+    case 'yes':
+    case '1':
+      return true;
+    case 'false':
+    case 'no':
+    case '0':
+    case null:
+      return false;
+    default:
+      return Boolean(string);
+  }
+}
