@@ -40,5 +40,11 @@ export const mapper = {
       title: 'About',
       index: 'about',
     },
+
+    todos: {
+      url: '/todos',
+      title: 'Todos',
+      index: 'todos',
+    },
   },
 };

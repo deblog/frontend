@@ -9,7 +9,7 @@ export const api = {
     post: '/users/signup',
   },
   user: {
-    get: "'/users",
+    get: '/users',
   },
   post: {
     get: '/posts',

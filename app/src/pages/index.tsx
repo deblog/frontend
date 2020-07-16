@@ -7,3 +7,4 @@ export { default as SignUp } from './auth/SignUp';
 export { default as Auth } from './auth/Auth';
 export { default as Mypage } from './mypage/Mypage';
 export { default as User } from './user/User';
+export { Todos } from './todos';
