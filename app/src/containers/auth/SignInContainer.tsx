@@ -1,17 +1,8 @@
-import React, {
-  useRef,
-  // useEffect
-} from 'react';
+import React, { useRef } from 'react';
 import styled from '@emotion/styled';
-import {
-  storage,
-  // stringBoolean
-} from '~/lib/utils';
+import { storage } from '~/lib/utils';
 import { useImmer } from 'use-immer';
 import { color } from '~/styles/_utils';
-import { useQuery } from '@apollo/react-hooks';
-import { GET_USERS } from '~/graphql/defines';
-
 interface clickEvent {
   type?: string;
 }
@@ -21,17 +12,9 @@ interface rememberProp {
   checked?: boolean;
 }
 
-interface userProps {
-  id: string;
-  name: string;
-}
-interface getUserData {
-  users: userProps[];
-}
 const convertRemember = (config: rememberProp) => {
   const { checked, value } = config;
 
-  // const getStRemember = stringBoolean(storage.get('remember'));
   if (!checked) {
     storage.remove('remember');
   } else {
@@ -47,14 +30,8 @@ const SignInContainerState = {
 function SignInContainer() {
   const [values, setValues] = useImmer(SignInContainerState);
   const [emailRef, passwordRef] = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
-  // const getStRemember = storage.get('remember');
-  // const convertGetStRemenber = stringBoolean(getStRemember);
   const valuesRemenber = values.remember;
   const isLogged = true;
-  const { loading, error, data } = useQuery<getUserData>(GET_USERS);
-  console.log(loading, error, data);
-  // DEBUG: graphql이랑 useEffect 어떻게 쓰는지 알아보기
-  // DEBUG: graphql serve mysql 연결하기
   /**
    * NOTE: event click
    * @param config
@@ -94,8 +71,6 @@ function SignInContainer() {
   //     draft.remember = convertGetStRemenber;
   //   });
   // }, []);
-
-  if (loading) return <Loading value={loading} />;
 
   return (
     <div>
@@ -138,22 +113,9 @@ function SignInContainer() {
             Login
           </button>
         </div>
-
-        {data &&
-          data.users.map(item => {
-            return <div key={item.id}>{item.name}</div>;
-          })}
       </Stlyed.SignInContainer>
     </div>
   );
-}
-
-interface LoadingProp {
-  value?: boolean | undefined | null;
-}
-function Loading(props: LoadingProp): any {
-  const { value } = props;
-  return value ? 'Loading...' : '';
 }
 
 const Stlyed = {
