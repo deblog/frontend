@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from '~/components/App';
-import { ApolloProvider } from '@apollo/react-hooks';
-import client from '~/graphql/apolloClient';
-// import store from 'store';
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from '~/store/modules';
+// import store from '~/store';
+// import { ApolloProvider } from '@apollo/react-hooks';
+// import client from '~/graphql/apolloClient';
 // import { LastLocationProvider } from 'react-router-last-location';
+
+const store = createStore(rootReducer);
 
 class Root extends Component {
   render() {
     return (
-      <ApolloProvider client={client}>
+      // <ApolloProvider client={client}>
+      <Provider store={store}>
         <Router>
           <App />
         </Router>
-      </ApolloProvider>
+      </Provider>
+      // </ApolloProvider>
     );
   }
 }
