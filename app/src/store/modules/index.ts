@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
-import { chatReducer } from './chat';
-import { systemReducer } from './system';
+import counterReducer from './counter';
+// import { baseReducer } from './base';
+// import { chatReducer } from './chat';
+// import { systemReducer } from './system';
+
 const rootReducer = combineReducers({
-  chat: chatReducer,
-  system: systemReducer,
+  counter: counterReducer,
+  // base: baseReducer,
+  // chat: chatReducer,
+  // system: systemReducer,
 });
 
+export default rootReducer;
 export type RootState = ReturnType<typeof rootReducer>;
