@@ -11,6 +11,7 @@
     "removeComments": true,
     "target": "es5",
     "declaration": false,
+    "no-any": false,
     "noUnusedLocals": false,
     "experimentalDecorators": true,
     "allowJs": true,
