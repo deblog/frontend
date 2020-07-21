@@ -46,7 +46,7 @@ const intialState: BaseState = {
 // )
 
 export default function baseReducer(state: BaseState = intialState, action: BaseAction) {
-  console.log(action, 'action');
+  // console.log(action, 'action');
   switch (action.type) {
     case GET_TODO:
       return { todos: state.todos };

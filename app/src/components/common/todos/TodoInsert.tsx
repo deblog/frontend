@@ -22,6 +22,7 @@ const TodosContainerState = {
 };
 const TodoInsert = memo(() => {
   const [values, setValues] = useImmer(TodosContainerState);
+  
   const { onInsertTodo } = useTodos();
   // NOTE: keyup event
   const handleKeyup = (config: keyupTypes): void => {};
