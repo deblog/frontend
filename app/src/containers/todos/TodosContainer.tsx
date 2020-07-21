@@ -5,7 +5,6 @@ import { useImmer } from 'use-immer';
 import { color } from '~/styles/_utils';
 import { useCounter, useTodos } from '~/components/base/hooks';
 import { increase, decrease, increaseBy } from '~/store/modules/counter';
-import { insertTodo, deleteTodo, toggleTodo } from '~/store/modules/base';
 import { useDispatch } from 'react-redux';
 import { withZeroNum } from '~/lib/utils';
 
@@ -41,7 +40,7 @@ const TodosContainer = () => {
   const [values, setValues] = useImmer(TodosContainerState);
   // const counter = useCounter();
   const dispatch = useDispatch();
-  const baseTodos = useTodos();
+  const { todos, onInsertTodo, onDeleteTodo, onToggleTodo } = useTodos();
 
   // NOTE: keyup event
   const handleKeyup = (config: keyupTypes): void => {
@@ -63,10 +62,10 @@ const TodosContainer = () => {
     const { type, name, value } = config;
     if (type === 'todo') {
       if (name === 'delete') {
-        dispatch(deleteTodo({ id: value }));
+        onDeleteTodo({ id: value });
       }
       if (name === 'toggle') {
-        dispatch(toggleTodo({ id: value }));
+        onToggleTodo({ id: value });
       }
     }
     if (type === 'counter') {
@@ -87,7 +86,7 @@ const TodosContainer = () => {
     setValues(draft => {
       draft.todoInput = '';
     });
-    dispatch(insertTodo({ title: values.todoInput }));
+    onInsertTodo({ title: values.todoInput });
   };
 
   return (
@@ -108,7 +107,7 @@ const TodosContainer = () => {
         </form>
       </div>
 
-      {baseTodos.todos.map((item, idx) => {
+      {todos.map((item, idx) => {
         console.log();
         return (
           <div key={idx} className="todo__item_rows">

@@ -34,17 +34,20 @@ export const mapper = {
       title: 'Sign Up',
       index: 'signUp',
     },
-
     about: {
       url: '/about',
       title: 'About',
       index: 'about',
     },
-
     todos: {
       url: '/todos',
       title: 'Todos',
       index: 'todos',
+    },
+    counter: {
+      url: '/counter',
+      title: 'Counter',
+      index: 'counter',
     },
   },
 };

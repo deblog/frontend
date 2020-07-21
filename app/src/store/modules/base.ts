@@ -29,7 +29,7 @@ const intialState: BaseState = {
   todos: [],
 };
 
-// export default handleActions<BaseState>(
+// export default handleActions<BaseState, BaseAction>(
 //   {
 //     [INSERT_TODO]:(state)=>{
 
@@ -38,7 +38,7 @@ const intialState: BaseState = {
 //   intialState
 // )
 
-function baseReducer(state: BaseState = intialState, action: BaseAction) {
+export default function baseReducer(state: BaseState = intialState, action: BaseAction) {
   console.log(action, 'action');
   switch (action.type) {
     case GET_TODO:
@@ -73,7 +73,7 @@ function baseReducer(state: BaseState = intialState, action: BaseAction) {
   }
 }
 
-export default baseReducer;
+// export default baseReducer;
 
 // import { BaseState, TodoActionTypes, GET_TODOS, INSERT_TODO, UPDATE_TODO } from '~/store/actions.d';
 

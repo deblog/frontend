@@ -8,3 +8,4 @@ export { default as Auth } from './auth/Auth';
 export { default as Mypage } from './mypage/Mypage';
 export { default as User } from './user/User';
 export { Todos } from './todos';
+export { Counter } from './Counter';
