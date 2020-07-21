@@ -26,7 +26,14 @@ export interface BaseState {
 }
 
 const intialState: BaseState = {
-  todos: [],
+  todos: [
+    {
+      id: 0,
+      title: '투두리스트 만들기',
+      toggle: false,
+    },
+    { id: 2, title: '투두리스트 만들기', toggle: false },
+  ],
 };
 
 // export default handleActions<BaseState, BaseAction>(

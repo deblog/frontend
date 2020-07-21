@@ -18,7 +18,7 @@ const TodosContainerState = {
 };
 const CounterContainer = () => {
   const [values, setValues] = useImmer(TodosContainerState);
-  const { count, onDecrease, onIncrease } = useCounter();
+  const { count, onDecrease, onIncrease, onIncreaseBy } = useCounter();
   // NOTE: click event
   const handleClick = (config: clicktypes): void => {
     const { type, name, value } = config;
@@ -31,10 +31,11 @@ const CounterContainer = () => {
         console.log('down');
         onDecrease();
       }
+      if (name === 'increaseBy') {
+        onIncreaseBy(value);
+      }
     }
   };
-
-  console.log(count, 'count');
 
   return (
     <Styled.CounterContainer>
@@ -47,6 +48,7 @@ const CounterContainer = () => {
 interface onClickProps {
   type: string;
   name: string;
+  value?: number;
 }
 interface typeCounterProps {
   onClick?: (val: onClickProps) => void;
@@ -67,6 +69,11 @@ const Counter = (props: typeCounterProps) => {
         >
           +
         </button>
+        <div>
+          <button onClick={() => onClick({ type: 'counter', name: 'increaseBy', value: count })}>
+            increaseBy
+          </button>
+        </div>
       </div>
     </>
   );
