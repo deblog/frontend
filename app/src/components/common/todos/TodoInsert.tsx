@@ -38,6 +38,7 @@ const TodoInsert = memo(() => {
   // NOTE: submit event
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
+    if (values.todoInput.trim().length === 0) return;
     setValues(draft => {
       draft.todoInput = '';
     });

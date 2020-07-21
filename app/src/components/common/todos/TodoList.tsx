@@ -71,7 +71,8 @@ const Styled = {
     }
     .todo__item_tx {
       display: inline-block;
-      width: 200px;
+      /* width: 200px; */
+      margin-right: 10px;
       cursor: pointer;
       font-size: 15px;
       &:hover {
@@ -79,6 +80,7 @@ const Styled = {
       }
       &.checked {
         text-decoration: line-through;
+        color: gray;
       }
     }
   `,

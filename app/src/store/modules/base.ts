@@ -32,7 +32,7 @@ const intialState: BaseState = {
       title: '투두리스트 만들기',
       toggle: false,
     },
-    { id: 2, title: '투두리스트 만들기', toggle: false },
+    { id: 1, title: '투두리스트 만들기', toggle: false },
   ],
 };
 
