@@ -49,6 +49,11 @@ function PlainHeader() {
           Todos
         </NavLink>
       </div>
+      <div className="header__rows">
+        <NavLink to={`${mapper.pages.counter.url}`} className="header__link" exact>
+          Counter
+        </NavLink>
+      </div>
     </Styled.PlainHeader>
   );
 }

@@ -25,6 +25,7 @@ const initialState: CounterState = {
 function counterReducer(state: CounterState = initialState, action: CounterAction) {
   switch (action.type) {
     case INCREASE:
+      console.log('들어는 오나?');
       return { count: state.count + 1 };
     case DECREASE:
       return { count: state.count - 1 };

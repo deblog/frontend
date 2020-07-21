@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, About, Error, Auth, User, Todos } from '~/pages';
+import { Home, About, Error, Auth, User, Todos, Counter } from '~/pages';
 import { mapper } from '~/lib/mapper';
 import { PublicRoute, PrivateRoute } from '~/components/base/route';
 
@@ -29,6 +29,7 @@ function App() {
 
       <PublicRoute exact path={mapper.pages.about.url} component={About} name="about" />
       <PublicRoute exact path={mapper.pages.todos.url} component={Todos} name="todos" />
+      <PublicRoute exact path={mapper.pages.counter.url} component={Counter} name="counter" />
 
       <Route component={Error} />
     </Switch>
