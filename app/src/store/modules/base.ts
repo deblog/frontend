@@ -26,7 +26,14 @@ export interface BaseState {
 }
 
 const intialState: BaseState = {
-  todos: [],
+  todos: [
+    {
+      id: 0,
+      title: '투두리스트 만들기',
+      toggle: false,
+    },
+    { id: 1, title: '투두리스트 만들기', toggle: false },
+  ],
 };
 
 // export default handleActions<BaseState, BaseAction>(
@@ -39,7 +46,7 @@ const intialState: BaseState = {
 // )
 
 export default function baseReducer(state: BaseState = intialState, action: BaseAction) {
-  console.log(action, 'action');
+  // console.log(action, 'action');
   switch (action.type) {
     case GET_TODO:
       return { todos: state.todos };

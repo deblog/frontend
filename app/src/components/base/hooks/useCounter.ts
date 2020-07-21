@@ -9,9 +9,12 @@ export default function useCounter() {
 
   const onIncrease = useCallback(() => dispatch(increase()), [dispatch]);
   const onDecrease = useCallback(() => dispatch(decrease()), [dispatch]);
+  const onIncreaseBy = useCallback(number => dispatch(increaseBy(number)), [dispatch]);
+
   return {
     count: counterState.count,
     onIncrease,
     onDecrease,
+    onIncreaseBy,
   };
 }
