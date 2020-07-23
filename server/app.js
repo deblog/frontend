@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 
-import indexRouter from '~/routes/index';
-import usersRouter from '~/routes/users';
-import { router } from '~/lib/utils';
+import indexRouter from '~/routes/api/index';
+import usersRouter from '~/routes/api/users';
+import authRouter from '~/routes/api/auth';
+import { mapper } from '~/lib/utils';
 
 const app = express();
 
@@ -22,8 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(router.address.index, indexRouter);
-app.use(router.address.users, usersRouter);
+app.use(mapper.router.address.index, indexRouter);
+app.use(mapper.router.address.users, usersRouter);
+app.use(mapper.router.address.auth, authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

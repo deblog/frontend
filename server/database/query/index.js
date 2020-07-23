@@ -1,4 +1,3 @@
-import moment from 'moment';
 class Query {
   constructor(props) {
     this.languaugeList = `SELECT * FROM deblog.languages`;

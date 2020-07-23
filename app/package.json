@@ -10,7 +10,7 @@
     "clean": "rm dist/bundle.js",
     "build-dev": "webpack -d --mode development",
     "build-prod": "webpack -p --mode production",
-    "start": "webpack-dev-server --hot --mode development --port 8800 --open"
+    "start": "webpack-dev-server --hot --mode development --port 8801 --open"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",

@@ -1,8 +1,8 @@
 import React from 'react';
 import { PlainHeader } from '~/components/common/header';
 
-function HeaderContainer() {
+const HeaderContainer = () => {
   return <PlainHeader />;
-}
+};
 
 export default HeaderContainer;

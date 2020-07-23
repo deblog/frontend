@@ -4,20 +4,12 @@ import _ from 'lodash';
 import { database } from '~/database/mysql';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
+import { local } from '~/lib/local';
 import { api, errorState, convertObjectToCommaString } from '~/lib/utils';
 const router = express.Router();
 
-// NOTE: main
-router.get(api.index.get, async (req, res, next) => {
-  const rows = await database.query(query.languaugeList);
-  const body = {
-    result: 1,
-    languages: rows,
-  };
-  res.json(body);
-});
 // NOTE: signup
-router.post(api.signup.post, async (req, res, next) => {
+router.post(api.auth.postSignUp, async (req, res, next) => {
   const userCode = uuidv4().replace(/\-/g, '');
   const { email, password } = req.body;
   const insertFormat = {
@@ -37,9 +29,8 @@ router.post(api.signup.post, async (req, res, next) => {
 });
 
 // NOTE: login
-router.post(api.login.post, async (req, res, next) => {
+router.post(api.auth.postLogin, async (req, res, next) => {
   const { email, password } = req.body;
-
   const rows = await database.query(query.login({ email, password }));
 
   if (rows.length === 1) {
@@ -49,4 +40,30 @@ router.post(api.login.post, async (req, res, next) => {
   }
 });
 
+// NOTE: jwt create
+router.get(api.token.getTokenCreate, async (req, res, next) => {
+  const { token, uuid, nowDate } = local.token.create();
+  local.token.set(token);
+  const localToken = local.token.get();
+  console.log(localToken);
+
+  const body = {
+    token: localToken,
+    uuid,
+    nowDate,
+  };
+  res.json(body);
+});
+
+// NOTE: token verify
+router.post(api.token.getTokenAuth, async (req, res, next) => {
+  const token = req.body.token;
+
+  const tokenVerifyResult = local.token.verify(token);
+
+  const body = {
+    jwt: tokenVerifyResult,
+  };
+  res.json(body);
+});
 module.exports = router;
