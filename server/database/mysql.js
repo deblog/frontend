@@ -108,6 +108,7 @@ class DataBase {
       }
     };
   }
+
   async poolAll(list) {
     const self = this;
     const connection = await this.poolConnection();
