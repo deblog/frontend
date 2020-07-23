@@ -1,28 +1,91 @@
+export const resultState = {
+  database: {
+    success: {
+      getData: {
+        result: 101,
+        msg: 'success -- get data',
+      },
+      notFound: {
+        result: 102,
+        msg: 'success -- not Found data',
+      },
+      notEnoughParam: {
+        result: 103,
+        msg: 'success -- not Enough Param',
+      },
+      noAffected: {
+        msg: 'success -- not affected',
+        result: 104,
+      },
+    },
+    failure: {
+      msg: 'failure -- ',
+      result: 0,
+    },
+  },
+  auth: {
+    valid: {
+      msg: 'auth -- valid',
+      result: 801,
+    },
+    expired: {
+      msg: 'auth -- expired',
+      resunt: 802,
+    },
+    empty: {
+      msg: 'auth -- empty',
+      resunt: 803,
+    },
+    invalid: {
+      msg: 'auth -- invalid',
+      resunt: 804,
+    },
+    refresh: {
+      msg: 'auth -- refresh',
+      resunt: 805,
+    },
+  },
+
+  expire: {
+    token: {
+      msg: 'token expire',
+      result: 701,
+    },
+  },
+  error: {
+    server: {
+      msg: 'server error',
+      result: 500,
+    },
+  },
+};
+
 export const mapper = {
   pageUrl: {
     login: '/signin',
   },
   api: {
     index: {
-      get: '/',
+      index: '/',
+      getHome: '/',
+      getLocalData: '/local/data',
     },
-    login: {
-      post: '/users/login',
-    },
-    signup: {
-      post: '/users/signup',
+    auth: {
+      index: '/auth',
+      postSignUp: '/auth/signup',
+      postLogin: '/auth/login',
     },
     user: {
       get: '/users',
     },
-    post: {
-      get: '/posts',
-    },
     error: {
+      index: '/error',
       get: '/error',
     },
-    test: {
-      get: '/test',
+    token: {
+      index: '/auth',
+      getTokenCreate: '/token',
+      getTokenAuth: '/token/auth',
     },
   },
   router: {
@@ -33,4 +96,5 @@ export const mapper = {
       test: '/test',
     },
   },
+  resultState,
 };
