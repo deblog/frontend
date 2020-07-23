@@ -59,6 +59,7 @@ class Token {
   renewal() {
     const token = this.create();
     this.set(token);
+    return this.get();
   }
   set(token) {
     this.token = token;

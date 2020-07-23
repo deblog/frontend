@@ -4,8 +4,8 @@ import _ from 'lodash';
 import { database } from '~/database/mysql';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
+import { api, errorState, convertObjectToCommaString, token } from '~/lib/utils';
 import { local } from '~/lib/local';
-import { api, errorState, convertObjectToCommaString } from '~/lib/utils';
 const router = express.Router();
 
 // NOTE: signup
@@ -42,15 +42,9 @@ router.post(api.auth.postLogin, async (req, res, next) => {
 
 // NOTE: jwt create
 router.get(api.token.getTokenCreate, async (req, res, next) => {
-  const { token, uuid, nowDate } = local.token.create();
-  local.token.set(token);
-  const localToken = local.token.get();
-  console.log(localToken);
-
+  const payload = token.renewal();
   const body = {
-    token: localToken,
-    uuid,
-    nowDate,
+    ...payload,
   };
   res.json(body);
 });
@@ -58,8 +52,7 @@ router.get(api.token.getTokenCreate, async (req, res, next) => {
 // NOTE: token verify
 router.post(api.token.getTokenAuth, async (req, res, next) => {
   const token = req.body.token;
-
-  const tokenVerifyResult = local.token.verify(token);
+  const tokenVerifyResult = token.verify(token);
 
   const body = {
     jwt: tokenVerifyResult,
