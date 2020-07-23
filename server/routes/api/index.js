@@ -5,16 +5,16 @@ import { database, db } from '~/database/mysql';
 import { local } from '~/lib/local';
 import { mapper, config, api, token } from '~/lib/utils';
 import { vaildToken } from '~/routes/middleware/auth';
-import { databaseConfig } from '~/database/mysql';
+import { connectConfig as dbConfig } from '~/database/mysql';
 
 // import redis from 'redis';
 
 const router = express.Router();
 // const client = redis.createClient({
-//   host: databaseConfig.host,
-//   port: databaseConfig.port,
+//   host: config.host,
+//   port: config.port,
 //   db: 0,
-//   password: databaseConfig.password,
+//   password: config.password,
 // });
 
 // NOTE: main
@@ -46,9 +46,18 @@ router.get(api.index.getLocalData, async (req, res, next) => {
 router.get(
   api.common.getLanguages,
   db.wrap(async (req, res, next, { query }) => {
-    const rows = await query(sql.languaugeList);
+    // const rows = await query(sql.languaugeList);
+    // const rows1 = await db.singleQuery(sql.languaugeList);
+    const [r1, r2] = await db.all([sql.languaugeList, sql.languaugeList]);
+    console.log('1');
+    const [rows, rows1] = await Promise.all([query(sql.languaugeList), query(sql.languaugeList)]);
+    console.log('2');
+
     const body = {
-      ...rows,
+      r1,
+      r2,
+      // rows1: rows1,
+      // rows: rows,
     };
     res.json(body);
   }),
