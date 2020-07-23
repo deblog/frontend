@@ -1,4 +1,4 @@
-class Query {
+class Sql {
   constructor(props) {
     this.languaugeList = `SELECT * FROM deblog.languages`;
   }
@@ -13,4 +13,4 @@ class Query {
   }
 }
 
-export const query = new Query();
+export const sql = new Sql();

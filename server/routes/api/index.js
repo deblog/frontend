@@ -1,18 +1,26 @@
 import express from 'express';
 import _ from 'lodash';
-import { query } from '~/database/query';
-import { database } from '~/database/mysql';
+import { sql } from '~/database/query';
+import { database, db } from '~/database/mysql';
 import { local } from '~/lib/local';
-import { mapper, config, api } from '~/lib/utils';
+import { mapper, config, api, token } from '~/lib/utils';
 import { vaildToken } from '~/routes/middleware/auth';
+import { connectConfig as dbConfig } from '~/database/mysql';
+
+// import redis from 'redis';
 
 const router = express.Router();
+// const client = redis.createClient({
+//   host: config.host,
+//   port: config.port,
+//   db: 0,
+//   password: config.password,
+// });
 
 // NOTE: main
 router.get(api.index.getHome, vaildToken, async (req, res, next) => {
-  local.token.renewal();
-  console.log(local.token.get());
-  const rows = await database.query(query.languaugeList);
+  token.renewal();
+  const rows = await db.query(sql.languaugeList);
   const body = {
     result: 1,
     languages: rows,
@@ -27,11 +35,32 @@ router.get(api.error.get, async (req, res, next) => {
 
 // NOTE: check local data
 router.get(api.index.getLocalData, async (req, res, next) => {
-  local.boot();
+  const lodalData = local.get();
   const body = {
-    ...local.data,
+    ...lodalData,
   };
   res.json(body);
 });
+
+// DEBUG: Sql Test
+router.get(
+  api.common.getLanguages,
+  db.wrap(async (req, res, next, { query }) => {
+    // const rows = await query(sql.languaugeList);
+    // const rows1 = await db.singleQuery(sql.languaugeList);
+    const [r1, r2] = await db.all([sql.languaugeList, sql.languaugeList]);
+    console.log('1');
+    const [rows, rows1] = await Promise.all([query(sql.languaugeList), query(sql.languaugeList)]);
+    console.log('2');
+
+    const body = {
+      r1,
+      r2,
+      // rows1: rows1,
+      // rows: rows,
+    };
+    res.json(body);
+  }),
+);
 
 module.exports = router;

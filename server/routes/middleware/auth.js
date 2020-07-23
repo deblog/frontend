@@ -2,8 +2,9 @@ import { mapper, token } from '~/lib/utils';
 
 export function vaildToken(req, res, next) {
   const getToken = token.get();
-  if (token.get()) {
+  if (getToken) {
     // get token
+    token.renewal();
     next();
   } else {
     res.json(mapper.resultState.expire.token);

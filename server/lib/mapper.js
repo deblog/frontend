@@ -87,6 +87,9 @@ export const mapper = {
       getTokenCreate: '/token',
       getTokenAuth: '/token/auth',
     },
+    common: {
+      getLanguages: '/languages',
+    },
   },
   router: {
     address: {
