@@ -11,10 +11,10 @@
     "removeComments": true,
     "target": "es5",
     "declaration": false,
-
     "noUnusedLocals": false,
     "experimentalDecorators": true,
     "allowJs": true,
+    "locale": "ko",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",

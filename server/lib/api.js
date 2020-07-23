@@ -14,4 +14,7 @@ export const api = {
   post: {
     get: '/posts',
   },
+  error: {
+    get: '/error',
+  },
 };

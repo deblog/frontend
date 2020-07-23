@@ -4,20 +4,13 @@ import _ from 'lodash';
 import { database } from '~/database/mysql';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { api, errorState, convertObjectToCommaString } from '~/lib/utils';
+import { mapper, errorState, convertObjectToCommaString } from '~/lib/utils';
 const router = express.Router();
 
-// NOTE: main
-router.get(api.index.get, async (req, res, next) => {
-  const rows = await database.query(query.languaugeList);
-  const body = {
-    result: 1,
-    languages: rows,
-  };
-  res.json(body);
-});
+const mapApi = mapper.api;
+
 // NOTE: signup
-router.post(api.signup.post, async (req, res, next) => {
+router.post(mapApi.signup.post, async (req, res, next) => {
   const userCode = uuidv4().replace(/\-/g, '');
   const { email, password } = req.body;
   const insertFormat = {
@@ -37,9 +30,8 @@ router.post(api.signup.post, async (req, res, next) => {
 });
 
 // NOTE: login
-router.post(api.login.post, async (req, res, next) => {
+router.post(mapApi.login.post, async (req, res, next) => {
   const { email, password } = req.body;
-
   const rows = await database.query(query.login({ email, password }));
 
   if (rows.length === 1) {

@@ -2,11 +2,19 @@ import _ from 'lodash';
 export { api } from '~/lib/api';
 export { getUsers } from '~/operations/user-operations';
 export { getPosts, getPost } from '~/operations/post-operations';
+export { mapper } from '~/lib/mapper';
+export { config } from '~/lib/config';
 
-export const router = {
-  address: {
-    index: '/',
-    users: '/users',
+export const local = {
+  data: {
+    token: null,
+  },
+
+  setToken(token) {
+    this.data.token = token;
+  },
+  deleteToken() {
+    this.data.token = null;
   },
 };
 
