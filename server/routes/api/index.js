@@ -46,21 +46,20 @@ router.get(api.index.getLocalData, async (req, res, next) => {
 router.get(
   api.common.getLanguages,
   db.wrap(async (req, res, next, { query }) => {
-    // const rows = await query(sql.languaugeList);
-    // const rows1 = await db.singleQuery(sql.languaugeList);
-    const [r1, r2] = await db.all([sql.languaugeList, sql.languaugeList]);
-    console.log('1');
-    const [rows, rows1] = await Promise.all([query(sql.languaugeList), query(sql.languaugeList)]);
-    console.log('2');
+    const [r1, r2] = await db.all([sql.getTestUser(7), sql.getTestUser(2)]);
+    const [rows, rows1] = await Promise.all([query(sql.getTestUser(3)), query(sql.languaugeList)]);
 
     const body = {
       r1,
       r2,
-      // rows1: rows1,
-      // rows: rows,
+      rows: rows,
+      rows1: rows1,
     };
     res.json(body);
   }),
 );
 
 module.exports = router;
+
+// const rows = await query(sql.languaugeList);
+// const rows1 = await db.singleQuery(sql.languaugeList);
