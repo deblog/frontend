@@ -34,7 +34,7 @@ class DataBase {
       status: null,
       msg: null,
     };
-    // set, create
+    // craete database set type,
     if (props.type === 'single') {
       // const {connection} = self.single();
       // self.connection = connection(props)
@@ -79,25 +79,22 @@ class DataBase {
       });
     };
   }
-  poolSingleQuery(sql) {
+  async poolSingleQuery(sql) {
     const self = this;
-    const result = self.poolConnection();
-    function query(connection) {
-      return new Promise(function (resolve, reject) {
-        try {
-          connection.query(sql, function (err, rows, fileds) {
-            if (err) reject(err);
-            else resolve(rows);
-          });
-        } catch (err) {
-          console.log(err.message);
-          connection.rollback();
-        } finally {
-          connection.release();
-        }
-      });
-    }
-    return result.then(query);
+    const connection = await self.poolConnection();
+    return new Promise(function (resolve, reject) {
+      try {
+        connection.query(sql, function (err, rows, fileds) {
+          if (err) reject(err);
+          else resolve(rows);
+        });
+      } catch (err) {
+        console.log(err.message);
+        connection.rollback();
+      } finally {
+        connection.release();
+      }
+    });
   }
 
   async poolAll(list) {
@@ -113,6 +110,12 @@ class DataBase {
       connection.release();
     }
   }
+
+  // pool 말고 그냥 connect
+  singleConnection() {}
+  singleQuery() {}
+  singleAll() {}
+  // extend 받는 곳에서 query 같은 이름으로 받아 쓰기
 
   status(code) {
     if (code === 'connect_error') {
@@ -132,19 +135,20 @@ class DatabaseTower extends DataBase {
       type: 'pool',
     });
   }
-  // DEBUG: 만들어야함
-  query() {
-    const self = this;
-    return self.poolQuery(connection);
-  }
+  // SECTION: 웨퍼 안쓸떄
+  // DEBUG: 만들어야함 signle pool 쿼리 말고
+  // query(connection) {
+  //   const self = this;
+  //   return self.poolQuery(connection);
+  // }
+  // // DEBUG: 만들어야함
+  // poolSingleQuery(sql) {
+  //   const self = this;
+  //   return self.poolSingleQuery.apply(self, [sql]);
+  // }
 
-  // DEBUG: 만들어야함
-  singleQuery(sql) {
-    const self = this;
-    return self.poolSingleQuery.apply(self, [sql]);
-  }
-
-  poolWapper(callback) {
+  // SECTION: 웨퍼를 쓸떄
+  expressPoolWapper(callback) {
     const self = this;
     return async (req, res, next) => {
       let connection;
@@ -182,10 +186,12 @@ class DatabaseTower extends DataBase {
       }
     };
   }
+
+  // router에서 쓸 목록들
   wrap(callback) {
     const self = this;
     if (self.config.type === 'pool') {
-      return self.poolWapper.apply(self, [callback]);
+      return self.expressPoolWapper.apply(self, [callback]);
     }
     if (self.config.type === 'single') {
       console.log('soon..');
@@ -246,3 +252,20 @@ export const db = dbPool;
 //   //   });
 //   // }
 // }
+
+// function query(connection) {
+//   return new Promise(function (resolve, reject) {
+//     try {
+//       connection.query(sql, function (err, rows, fileds) {
+//         if (err) reject(err);
+//         else resolve(rows);
+//       });
+//     } catch (err) {
+//       console.log(err.message);
+//       connection.rollback();
+//     } finally {
+//       connection.release();
+//     }
+//   });
+// }
+// return result.then(query);

@@ -49,11 +49,11 @@ router.get(
     const [r1, r2] = await all([sql.getTestUser(5), sql.getTestUser(2)]);
     const r5 = await query(sql.getTestUser(5));
     const r6 = await singleQuery(sql.getTestUser(6));
-    // const [r3, r4] = await Promise.all([query(sql.getTestUser(3)), query(sql.getTestUser(4))]);
 
     const body = {
       r1,
       r2,
+
       // r3,
       // r4,
       r5,
@@ -66,4 +66,6 @@ router.get(
 module.exports = router;
 
 // const rows = await query(sql.languaugeList);
+// const rows = await db.query(sql.languaugeList);
 // const rows1 = await db.singleQuery(sql.languaugeList);
+// const [r3, r4] = await Promise.all([query(sql.getTestUser(3)), query(sql.getTestUser(4))]);
