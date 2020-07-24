@@ -97,8 +97,11 @@ class DataBase {
     });
   }
 
-  async poolAll(list) {
+  async poolAll(list = [], indep = false, connection) {
     const self = this;
+    if (indep === false) {
+      return Promise.all(list.map(item => self.poolQuery(connection)(item)));
+    }
     const connection = await self.poolConnection();
     await connection.beginTransaction();
     try {
@@ -165,11 +168,11 @@ class DatabaseTower extends DataBase {
         res.json(self.status('connect_error'));
         return;
       }
-      await connection.beginTransaction();
+      // await connection.beginTransaction();
       try {
         const query = self.poolQuery(connection);
         const singleQuery = sql => self.poolSingleQuery.apply(self, [sql]);
-        const all = list => self.poolAll.apply(self, [list]);
+        const all = list => self.poolAll.apply(self, [list, false, connection]);
         const extendObject = {
           query,
           singleQuery,
