@@ -30,6 +30,10 @@ class DataBase {
   initialize(props) {
     const self = this;
     self.config = props;
+    self.error = {
+      status: null,
+      msg: null,
+    };
     // set, create
     if (props.type === 'single') {
       // const {connection} = self.single();
@@ -39,16 +43,23 @@ class DataBase {
       this.pool = mysql.createPool(props.pool);
     }
   }
+
   poolConnection() {
     const self = this;
     return new Promise((resolve, reject) => {
       self.pool.getConnection(function (err, connection) {
         if (err) {
           reject(err);
-          connection.release();
+        } else {
+          connection.beginTransaction(function (err) {
+            if (err) {
+              connection.rollback(function () {
+                connection.release();
+              });
+            }
+          });
+          resolve(connection);
         }
-        connection.beginTransaction();
-        resolve(connection);
       });
     });
   }
@@ -68,7 +79,6 @@ class DataBase {
       });
     };
   }
-
   poolSingleQuery(sql) {
     const self = this;
     const result = self.poolConnection();
@@ -89,30 +99,11 @@ class DataBase {
     }
     return result.then(query);
   }
-  poolWapper(callback) {
-    return async (req, res, next) => {
-      const connection = await this.poolConnection();
-      await connection.beginTransaction();
-      try {
-        const query = this.poolQuery(connection);
-        const extendObject = {
-          query,
-        };
-        callback(req, res, next, extendObject);
-        await connection.commit();
-      } catch (error) {
-        await connection.rollback();
-        throw error;
-      } finally {
-        connection.release();
-      }
-    };
-  }
 
   async poolAll(list) {
     const self = this;
-    const connection = await this.poolConnection();
-    connection.beginTransaction();
+    const connection = await self.poolConnection();
+    await connection.beginTransaction();
     try {
       return Promise.all(list.map(item => self.poolQuery(connection)(item)));
     } catch (err) {
@@ -123,6 +114,74 @@ class DataBase {
     }
   }
 
+  status(code) {
+    if (code === 'connect_error') {
+      return {
+        code: 500,
+        msg: 'database connect error',
+      };
+    }
+  }
+}
+
+// Tower 손보기
+class DatabaseTower extends DataBase {
+  constructor(props) {
+    super({
+      ...props,
+      type: 'pool',
+    });
+  }
+  // DEBUG: 만들어야함
+  query() {
+    const self = this;
+    return self.poolQuery(connection);
+  }
+
+  // DEBUG: 만들어야함
+  singleQuery(sql) {
+    const self = this;
+    return self.poolSingleQuery.apply(self, [sql]);
+  }
+
+  poolWapper(callback) {
+    const self = this;
+    return async (req, res, next) => {
+      let connection;
+      try {
+        connection = await self.poolConnection();
+      } catch (err) {
+        db.error = {
+          status: true,
+          msg: err,
+        };
+      }
+      if (db.error.status) {
+        console.log(db.error);
+        res.json(self.status('connect_error'));
+        return;
+      }
+      await connection.beginTransaction();
+      try {
+        const query = self.poolQuery(connection);
+        const singleQuery = sql => self.poolSingleQuery.apply(self, [sql]);
+        const all = list => self.poolAll.apply(self, [list]);
+        const extendObject = {
+          query,
+          singleQuery,
+          all,
+        };
+
+        callback(req, res, next, extendObject);
+        await connection.commit();
+      } catch (error) {
+        await connection.rollback();
+        throw error;
+      } finally {
+        connection.release();
+      }
+    };
+  }
   wrap(callback) {
     const self = this;
     if (self.config.type === 'pool') {
@@ -132,21 +191,10 @@ class DataBase {
       console.log('soon..');
     }
   }
-}
 
-class DatabaseTower extends DataBase {
-  constructor(props) {
-    super({
-      ...props,
-      type: 'pool',
-    });
-  }
-
-  singleQuery(sql) {
-    return this.poolSingleQuery(sql);
-  }
   all(querys) {
-    return this.poolAll(querys);
+    const self = this;
+    return self.poolAll(querys);
   }
 }
 const dbPool = new DatabaseTower({
@@ -186,4 +234,15 @@ export const db = dbPool;
 //     close,
 //     connection,
 //   };
+// }
+
+// NOTE: begin;
+// function (err) {
+//   // // DEBUG: 여기부분 생각해봐야함 rollback이 일어나고 relase가 됬을때
+//   // if (err) {
+//   //   connection.rollback(function () {
+//   //     // DEBUG: begin transaction 부분에서 에러가 났을때, 뒤에 메서드들에서 finally로 가나? 테스트해봐야함
+//   //     connection.release();
+//   //   });
+//   // }
 // }

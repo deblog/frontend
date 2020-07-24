@@ -45,15 +45,19 @@ router.get(api.index.getLocalData, async (req, res, next) => {
 // DEBUG: Sql Test
 router.get(
   api.common.getLanguages,
-  db.wrap(async (req, res, next, { query }) => {
-    const [r1, r2] = await db.all([sql.getTestUser(7), sql.getTestUser(2)]);
-    const [rows, rows1] = await Promise.all([query(sql.getTestUser(3)), query(sql.languaugeList)]);
+  db.wrap(async (req, res, next, { query, all, singleQuery }) => {
+    const [r1, r2] = await all([sql.getTestUser(5), sql.getTestUser(2)]);
+    const r5 = await query(sql.getTestUser(5));
+    const r6 = await singleQuery(sql.getTestUser(6));
+    // const [r3, r4] = await Promise.all([query(sql.getTestUser(3)), query(sql.getTestUser(4))]);
 
     const body = {
       r1,
       r2,
-      rows: rows,
-      rows1: rows1,
+      // r3,
+      // r4,
+      r5,
+      r6,
     };
     res.json(body);
   }),

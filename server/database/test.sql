@@ -13,3 +13,7 @@ insert into deblog.test (title) values ("v2");
 insert into deblog.test (title) values ("v3");
 insert into deblog.test (title) values ("v4");
 insert into deblog.test (title) values ("v5");
+insert into deblog.test (title) values ("v6");
+insert into deblog.test (title) values ("v7");
+insert into deblog.test (title) values ("v8");
+insert into deblog.test (title) values ("v9");
