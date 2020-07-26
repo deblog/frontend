@@ -1,3 +1,4 @@
+import _ from 'lodash';
 export const resultState = {
   database: {
     success: {
@@ -60,7 +61,7 @@ export const resultState = {
   },
 };
 
-export const mapper = {
+const mapper = {
   pageUrl: {
     login: '/signin',
   },
@@ -92,12 +93,19 @@ export const mapper = {
     },
   },
   router: {
-    address: {
-      index: '/',
-      users: '/users',
-      auth: '/auth',
-      test: '/test',
-    },
+    index: '/',
+    users: '/users',
+    auth: '/auth',
+    test: '/test',
   },
   resultState,
+  configure() {
+    const self = this;
+    _.forEach(self.router, (item, key, val) => {
+      val[key] = '/api' + item;
+    });
+  },
 };
+// mapper  configure
+mapper.configure();
+export { mapper };

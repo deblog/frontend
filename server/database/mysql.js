@@ -101,16 +101,17 @@ class DataBase {
     const self = this;
     if (indep === false) {
       return Promise.all(list.map(item => self.poolQuery(connection)(item)));
-    }
-    const connection = await self.poolConnection();
-    await connection.beginTransaction();
-    try {
-      return Promise.all(list.map(item => self.poolQuery(connection)(item)));
-    } catch (err) {
-      await connection.rollback();
-      throw error;
-    } finally {
-      connection.release();
+    } else {
+      const connection = await self.poolConnection();
+      await connection.beginTransaction();
+      try {
+        return Promise.all(list.map(item => self.poolQuery(connection)(item)));
+      } catch (err) {
+        await connection.rollback();
+        throw error;
+      } finally {
+        connection.release();
+      }
     }
   }
 
@@ -140,10 +141,10 @@ class DatabaseTower extends DataBase {
   }
   // SECTION: 웨퍼 안쓸떄
   // DEBUG: 만들어야함 signle pool 쿼리 말고
-  // query(connection) {
-  //   const self = this;
-  //   return self.poolQuery(connection);
-  // }
+  singleQuery(connection) {
+    const self = this;
+    return self.poolSingleQuery(connection);
+  }
   // // DEBUG: 만들어야함
   // poolSingleQuery(sql) {
   //   const self = this;
@@ -211,10 +212,32 @@ const dbPool = new DatabaseTower({
   pool: config.local.pool,
 });
 
+export { sql } from '~/database/query';
 export const connectConfig = config.local.connect;
 export const database = dbPool;
 export const db = dbPool;
 
+// NOTE: Example
+// Router.wrap('get', api.common.getLanguages, async (req, res, next, { query, all, singleQuery }) => {
+//   const [r1, r2] = await all([sql.getTestUser(5), sql.getTestUser(2)]);
+//   const r5 = await query(sql.getTestUser(5));
+//   const r6 = await singleQuery(sql.getTestUser(6));
+
+//   const body = {
+//     r1,
+//     r2,
+//     r5,
+//     r6,
+//   };
+//   res.json(body);
+// });
+
+// const rows = await query(sql.languaugeList);
+// const rows = await db.query(sql.languaugeList);
+// const rows1 = await db.singleQuery(sql.languaugeList);
+// const [r3, r4] = await Promise.all([query(sql.getTestUser(3)), query(sql.getTestUser(4))]);
+
+// LAGACY:
 // single() {
 //   const self = this;
 //   function query(sql, args) {
