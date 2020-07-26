@@ -34,7 +34,7 @@ class DataBase {
       status: null,
       msg: null,
     };
-    // set, create
+    // craete database set type,
     if (props.type === 'single') {
       // const {connection} = self.single();
       // self.connection = connection(props)
@@ -79,40 +79,47 @@ class DataBase {
       });
     };
   }
-  poolSingleQuery(sql) {
-    const self = this;
-    const result = self.poolConnection();
-    function query(connection) {
-      return new Promise(function (resolve, reject) {
-        try {
-          connection.query(sql, function (err, rows, fileds) {
-            if (err) reject(err);
-            else resolve(rows);
-          });
-        } catch (err) {
-          console.log(err.message);
-          connection.rollback();
-        } finally {
-          connection.release();
-        }
-      });
-    }
-    return result.then(query);
-  }
-
-  async poolAll(list) {
+  async poolSingleQuery(sql) {
     const self = this;
     const connection = await self.poolConnection();
-    await connection.beginTransaction();
-    try {
+    return new Promise(function (resolve, reject) {
+      try {
+        connection.query(sql, function (err, rows, fileds) {
+          if (err) reject(err);
+          else resolve(rows);
+        });
+      } catch (err) {
+        console.log(err.message);
+        connection.rollback();
+      } finally {
+        connection.release();
+      }
+    });
+  }
+
+  async poolAll(list = [], indep = false, connection) {
+    const self = this;
+    if (indep === false) {
       return Promise.all(list.map(item => self.poolQuery(connection)(item)));
-    } catch (err) {
-      await connection.rollback();
-      throw error;
-    } finally {
-      connection.release();
+    } else {
+      const connection = await self.poolConnection();
+      await connection.beginTransaction();
+      try {
+        return Promise.all(list.map(item => self.poolQuery(connection)(item)));
+      } catch (err) {
+        await connection.rollback();
+        throw error;
+      } finally {
+        connection.release();
+      }
     }
   }
+
+  // pool 말고 그냥 connect
+  singleConnection() {}
+  singleQuery() {}
+  singleAll() {}
+  // extend 받는 곳에서 query 같은 이름으로 받아 쓰기
 
   status(code) {
     if (code === 'connect_error') {
@@ -132,19 +139,20 @@ class DatabaseTower extends DataBase {
       type: 'pool',
     });
   }
-  // DEBUG: 만들어야함
-  query() {
+  // SECTION: 웨퍼 안쓸떄
+  // DEBUG: 만들어야함 signle pool 쿼리 말고
+  singleQuery(connection) {
     const self = this;
-    return self.poolQuery(connection);
+    return self.poolSingleQuery(connection);
   }
+  // // DEBUG: 만들어야함
+  // poolSingleQuery(sql) {
+  //   const self = this;
+  //   return self.poolSingleQuery.apply(self, [sql]);
+  // }
 
-  // DEBUG: 만들어야함
-  singleQuery(sql) {
-    const self = this;
-    return self.poolSingleQuery.apply(self, [sql]);
-  }
-
-  poolWapper(callback) {
+  // SECTION: 웨퍼를 쓸떄
+  expressPoolWapper(callback) {
     const self = this;
     return async (req, res, next) => {
       let connection;
@@ -161,11 +169,11 @@ class DatabaseTower extends DataBase {
         res.json(self.status('connect_error'));
         return;
       }
-      await connection.beginTransaction();
+      // await connection.beginTransaction();
       try {
         const query = self.poolQuery(connection);
         const singleQuery = sql => self.poolSingleQuery.apply(self, [sql]);
-        const all = list => self.poolAll.apply(self, [list]);
+        const all = list => self.poolAll.apply(self, [list, false, connection]);
         const extendObject = {
           query,
           singleQuery,
@@ -182,10 +190,12 @@ class DatabaseTower extends DataBase {
       }
     };
   }
+
+  // router에서 쓸 목록들
   wrap(callback) {
     const self = this;
     if (self.config.type === 'pool') {
-      return self.poolWapper.apply(self, [callback]);
+      return self.expressPoolWapper.apply(self, [callback]);
     }
     if (self.config.type === 'single') {
       console.log('soon..');
@@ -202,10 +212,32 @@ const dbPool = new DatabaseTower({
   pool: config.local.pool,
 });
 
+export { sql } from '~/database/query';
 export const connectConfig = config.local.connect;
 export const database = dbPool;
 export const db = dbPool;
 
+// NOTE: Example
+// Router.wrap('get', api.common.getLanguages, async (req, res, next, { query, all, singleQuery }) => {
+//   const [r1, r2] = await all([sql.getTestUser(5), sql.getTestUser(2)]);
+//   const r5 = await query(sql.getTestUser(5));
+//   const r6 = await singleQuery(sql.getTestUser(6));
+
+//   const body = {
+//     r1,
+//     r2,
+//     r5,
+//     r6,
+//   };
+//   res.json(body);
+// });
+
+// const rows = await query(sql.languaugeList);
+// const rows = await db.query(sql.languaugeList);
+// const rows1 = await db.singleQuery(sql.languaugeList);
+// const [r3, r4] = await Promise.all([query(sql.getTestUser(3)), query(sql.getTestUser(4))]);
+
+// LAGACY:
 // single() {
 //   const self = this;
 //   function query(sql, args) {
@@ -246,3 +278,20 @@ export const db = dbPool;
 //   //   });
 //   // }
 // }
+
+// function query(connection) {
+//   return new Promise(function (resolve, reject) {
+//     try {
+//       connection.query(sql, function (err, rows, fileds) {
+//         if (err) reject(err);
+//         else resolve(rows);
+//       });
+//     } catch (err) {
+//       console.log(err.message);
+//       connection.rollback();
+//     } finally {
+//       connection.release();
+//     }
+//   });
+// }
+// return result.then(query);

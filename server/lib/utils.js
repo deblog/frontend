@@ -4,11 +4,44 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import { config } from '~/lib/config';
 import { mapper } from '~/lib/mapper';
+import express from 'express';
+import { database, db } from '~/database/mysql';
 
 export { mapper } from '~/lib/mapper';
 export { config } from '~/lib/config';
 export const api = mapper.api;
+export const router = express.Router();
 
+/**
+ * NOTE: Custom Express Router
+ */
+const Router = router;
+Router.wrap = function (method, api, ...args) {
+  const callback = args[args.length - 1];
+  return router[method](api, ...args, db.wrap(callback));
+};
+// DEBUG: another custom
+// export const Router = {
+//   wrap(method, api, ...args) {
+//     const callback = args[args.length - 1];
+//     return router[method](api, ...args, db.wrap(callback));
+//   },
+//   get: router.get,
+//   // get(api, ...args) {
+//   //   const callback = args[args.length - 1];
+//   //   return router.get(api, ...args, db.wrap(callback));
+//   // },
+//   // post(api, ...args) {
+//   //   const callback = args[args.length - 1];
+//   //   return router.post(api, ...args, db.wrap(callback));
+//   // },
+//   route: router,
+// };
+export { Router };
+
+/**
+ * NOTE: jwt Token
+ */
 class Token {
   constructor(props) {
     this.token = null;
@@ -76,6 +109,12 @@ export const token = new Token({
   secret: config.jwt.secret,
 });
 
+console.log(token);
+
+/**
+ * NOTE: Erro State
+ * @param {*} rows
+ */
 export function errorState(rows) {
   /**
    * result 0 => 데이터 없음
@@ -109,7 +148,12 @@ export function convertObjectToCommaString(obj) {
       .join(', '),
   };
 }
-
+/**
+ * NOTE: object Query convert to string
+ * data base query format
+ * {hello:world} => hello="world",
+ * @param {*} obj
+ */
 export function convertObjectToUpdateQuery(obj) {
   const updateString = _.reduce(
     Object.entries(obj),
@@ -122,8 +166,12 @@ export function convertObjectToUpdateQuery(obj) {
   return removeLastComma(updateString);
 }
 
-export function removeLastComma(strng) {
-  var n = strng.lastIndexOf(',');
-  var a = strng.substring(0, n);
+/**
+ * NOTE: remove string last comma
+ * @param {*} str
+ */
+export function removeLastComma(str) {
+  var n = str.lastIndexOf(',');
+  var a = str.substring(0, n);
   return a;
 }

@@ -1,15 +1,13 @@
-import express from 'express';
-import { query } from '~/database/query';
 import _ from 'lodash';
+import moment from 'moment';
+import { query } from '~/database/query';
+import { local } from '~/lib/local';
 import { database } from '~/database/mysql';
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
-import { api, errorState, convertObjectToCommaString, token } from '~/lib/utils';
-import { local } from '~/lib/local';
-const router = express.Router();
+import { api, errorState, convertObjectToCommaString, token, Router } from '~/lib/utils';
 
 // NOTE: signup
-router.post(api.auth.postSignUp, async (req, res, next) => {
+Router.wrap('post', api.auth.postSignUp, async (req, res, next) => {
   const userCode = uuidv4().replace(/\-/g, '');
   const { email, password } = req.body;
   const insertFormat = {
@@ -29,7 +27,7 @@ router.post(api.auth.postSignUp, async (req, res, next) => {
 });
 
 // NOTE: login
-router.post(api.auth.postLogin, async (req, res, next) => {
+Router.wrap('post', api.auth.postLogin, async (req, res, next) => {
   const { email, password } = req.body;
   const rows = await database.query(query.login({ email, password }));
 
@@ -41,7 +39,7 @@ router.post(api.auth.postLogin, async (req, res, next) => {
 });
 
 // NOTE: jwt create
-router.get(api.token.getTokenCreate, async (req, res, next) => {
+Router.wrap('get', api.token.getTokenCreate, async (req, res, next) => {
   const payload = token.renewal();
   const body = {
     ...payload,
@@ -50,13 +48,12 @@ router.get(api.token.getTokenCreate, async (req, res, next) => {
 });
 
 // NOTE: token verify
-router.post(api.token.getTokenAuth, async (req, res, next) => {
-  const token = req.body.token;
-  const tokenVerifyResult = token.verify(token);
-
+Router.wrap('post', api.token.getTokenAuth, async (req, res, next) => {
+  const { token: bodyToken } = req.body;
+  const tokenVerifyResult = token.verify(bodyToken);
   const body = {
     jwt: tokenVerifyResult,
   };
   res.json(body);
 });
-module.exports = router;
+module.exports = Router;
