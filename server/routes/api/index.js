@@ -31,6 +31,7 @@ Router.wrap('get', api.error.get, async (req, res, next) => {
 // NOTE: check local data
 Router.wrap('get', api.index.getLocalData, async (req, res, next) => {
   const lodalData = local.get();
+  console.log('gmm..?');
   const body = {
     ...lodalData,
   };
