@@ -5,7 +5,7 @@ import { useImmer } from 'use-immer';
 import { color } from '~/styles/_utils';
 import { useCounter } from '~/components/base/hooks';
 import { withZeroNum } from '~/lib/utils';
-
+console.log('test');
 interface clicktypes {
   type: string;
   name?: string;
