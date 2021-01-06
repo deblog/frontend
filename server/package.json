@@ -28,7 +28,7 @@
     "@babel/core": "^7.10.4",
     "@babel/node": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "cors": "^2.8.5",
     "fs": "0.0.1-security",
