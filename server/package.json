@@ -32,7 +32,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "cors": "^2.8.5",
     "fs": "0.0.1-security",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "nodemon": "^2.0.4",
     "uuid": "^8.2.0"
